@@ -4,10 +4,8 @@
 #include <chrono>
 #include "Order.h"
 #include "OrderBook.h"
-#include "ThreadPool.h"
 
 int main() {
-    ThreadPool pool(16);
     OrderBook book;
 
     std::random_device rd;
@@ -22,7 +20,7 @@ int main() {
     for (int i = 0; i < 100000; i++) {
         orders.emplace_back(
             static_cast<Order::OrderType>(edis(gen)),
-            pdis(gen),
+            dis(gen),
             dis(gen)
         );
     }
@@ -30,9 +28,7 @@ int main() {
     auto start = std::chrono::high_resolution_clock::now();
 
     for (Order& order:orders) {
-        pool.enqueue_task([&book, &order] {
-            book.placeOrder(order);
-        });
+        book.placeOrder(order);
     }
 
     auto end = std::chrono::high_resolution_clock::now();

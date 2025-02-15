@@ -6,7 +6,7 @@ std::atomic<unsigned int> id(0);
 
 Order::Order(
     OrderType type,
-    double price,
+    int price,
     int quantity
 ) noexcept : order_id(id++), price(price), quantity(quantity),
 type(type) {}
@@ -15,7 +15,7 @@ unsigned int Order::getId() const noexcept {
     return this->order_id;
 }
 
-double Order::getPrice() const noexcept {
+int Order::getPrice() const noexcept {
     return this->price;
 }
 

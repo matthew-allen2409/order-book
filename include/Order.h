@@ -12,12 +12,12 @@ public:
 
     Order(
         OrderType type,
-        double price,
+        int price,
         int quantity
     ) noexcept;
 
     unsigned int getId() const noexcept;
-    double getPrice() const noexcept;
+    int getPrice() const noexcept;
     int getQuantity() const noexcept;
     OrderType getType() const noexcept;
 
@@ -28,7 +28,7 @@ public:
 
 private:
     unsigned int order_id;
-    double price;
+    int price;
     int quantity;
     OrderType type;
 
