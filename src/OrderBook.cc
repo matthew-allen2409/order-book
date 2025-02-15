@@ -1,13 +1,14 @@
 #include <shared_mutex>
 #include <map>
 #include <iostream>
-#include <memory>
 #include <cmath>
+#include <memory>
 #include "OrderBook.h"
 #include "Order.h"
 
-void OrderBook::placeOrder(Order& order) {
-    order.getType() == Order::OrderType::Buy ? buy_orders.insert_order(order) : sell_orders.insert_order(order);
+void OrderBook::placeOrder(std::unique_ptr<Order> order) {
+    std::shared_ptr<Order> orderPtr = std::move(order);
+    orderPtr->getType() == Order::OrderType::Buy ? buy_orders.insert_order(orderPtr) : sell_orders.insert_order(orderPtr);
 }
 
 void OrderBook::removeOrder(int orderId) {}

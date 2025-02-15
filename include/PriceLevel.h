@@ -1,5 +1,4 @@
 #include<mutex>
-#include<condition_variable>
 #include<deque>
 #include<memory>
 #include "Order.h"
@@ -11,13 +10,13 @@
 
 class PriceLevel {
 public:
-    void addOrder(Order& order);
+    void addOrder(std::shared_ptr<Order> order);
     void removeOrder(const unsigned int orderId);
     void print_orders();
 
 private:
     std::mutex level_mutex;
-    std::deque<Order> orders;
+    std::deque<std::shared_ptr<Order>> orders;
 };
 
 #endif

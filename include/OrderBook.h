@@ -11,7 +11,7 @@
 
 class OrderBook {
 public:
-    void placeOrder(Order& order);
+    void placeOrder(std::unique_ptr<Order> order);
     void removeOrder(int orderId);
     void modifyOrder(int orderId, int newPrice, int newQuantity);
     Order getOrderById(int orderId) const;

@@ -4,11 +4,12 @@
 #include "PriceLevel.h"
 #include "Order.h"
 #include <shared_mutex>
+#include <memory>
 #include <map>
 
 class OrderMap {
 public:
-    void insert_order(Order& order);
+    void insert_order(std::shared_ptr<Order> order);
     void print_map();
 
 

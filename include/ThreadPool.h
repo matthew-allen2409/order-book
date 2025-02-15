@@ -7,22 +7,24 @@
 #include <queue>
 #include <mutex>
 #include <vector>
+#include <atomic>
 
+using Task = std::function<void()>;
 
 class ThreadPool {
 public:
-    ThreadPool(int numThreads);
+    ThreadPool(size_t numThreads);
 
     ~ThreadPool();
 
-    void enqueue_task(std::function<void()> task);
+    void enqueue_task(Task);
 
 private:
     std::vector<std::thread> workers;
     std::queue<std::function<void()>> taskQueue;
     std::mutex queueMutex;
     std::condition_variable condition;
-    bool stop;
+    std::atomic<bool> stop;
 };
 
 #endif
