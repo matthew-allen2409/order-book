@@ -1,25 +1,31 @@
 #include <shared_mutex>
 #include <functional>
+#include <thread>
+#include <iostream>
 #include "ThreadPool.h"
 
 ThreadPool::ThreadPool(size_t numThreads) : stop(false) {
-    for (size_t i; i < numThreads; i++) {
-        while (!stop) {
-            Task task;
-            {
-                std::unique_lock<std::mutex> lock(queueMutex);
-                condition.wait(lock, [this] { return !taskQueue.empty() || stop; });
+    for (size_t i = 0; i < numThreads; i++) {
+        workers.emplace_back(
+            [this] {
+                while (true) {
+                    Task task;
+                    {
+                        std::unique_lock<std::mutex> lock(queueMutex);
+                        condition.wait(lock, [this] { return !taskQueue.empty() || stop; });
 
-                if (stop && taskQueue.empty()) {
-                    return;
+                        if (stop && taskQueue.empty()) {
+                            return;
+                        }
+
+                        task = std::move(taskQueue.front());
+                        taskQueue.pop();
+                    }
+
+                    task();
                 }
-
-                task = std::move(taskQueue.front());
-                taskQueue.pop();
             }
-
-            task();
-        }
+        );
     }
 }
 

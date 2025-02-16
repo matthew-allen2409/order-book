@@ -12,7 +12,7 @@
 class OrderBook {
 public:
     void placeOrder(std::unique_ptr<Order> order);
-    void removeOrder(int orderId);
+    void removeOrder(unsigned int orderId);
     void modifyOrder(int orderId, int newPrice, int newQuantity);
     Order getOrderById(int orderId) const;
     void printOrders();

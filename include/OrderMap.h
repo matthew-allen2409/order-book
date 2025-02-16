@@ -10,6 +10,7 @@
 class OrderMap {
 public:
     void insert_order(std::shared_ptr<Order> order);
+    void remove_order(std::shared_ptr<Order> order);
     void print_map();
 
 

@@ -11,7 +11,8 @@
 class PriceLevel {
 public:
     void addOrder(std::shared_ptr<Order> order);
-    void removeOrder(const unsigned int orderId);
+    void removeOrder(std::shared_ptr<Order> order);
+    bool empty();
     void print_orders();
 
 private:
