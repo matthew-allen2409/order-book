@@ -19,22 +19,14 @@ int main() {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    {
-        ThreadPool pool(4);
-
-        for (int i = 0; i < numOrders; i++) {
-            pool.enqueue_task(
-                [&book, &dis, &edis, &gen] {
-                    book.placeOrder(
-                        std::make_unique<Order>(
-                            static_cast<Order::OrderType>(edis(gen)),
-                            dis(gen),
-                            dis(gen)
-                        )
-                    );
-                }
-            );
-        }
+    for (int i = 0; i < numOrders; i++) {
+        book.placeOrder(
+            std::make_unique<Order>(
+                static_cast<Order::OrderType>(edis(gen)),
+                dis(gen),
+                dis(gen)
+            )
+        );
     }
 
     auto end = std::chrono::high_resolution_clock::now();
@@ -45,3 +37,4 @@ int main() {
 
     std::cout << "Execution Time: " << duration.count() << " microseconds" << std::endl;
 }
+

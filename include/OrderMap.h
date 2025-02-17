@@ -3,7 +3,6 @@
 
 #include "PriceLevel.h"
 #include "Order.h"
-#include <shared_mutex>
 #include <memory>
 #include <map>
 
@@ -16,7 +15,6 @@ public:
 
 private:
     std::map<int, PriceLevel> orders;
-    std::shared_mutex mtx;
 };
 
 #endif

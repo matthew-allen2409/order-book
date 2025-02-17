@@ -23,35 +23,27 @@ int Order::getQuantity() const noexcept {
     return this->quantity;
 }
 
+void Order::setQuantity(const int newQuantity) noexcept {
+    quantity = newQuantity;
+}
+
 Order::OrderType Order::getType() const noexcept {
     return this->type;
 }
 
 bool Order::operator<(const Order& other) const noexcept {
-    if (this->price == other.price) {
-        return this->order_id < other.order_id;
-    }
     return this->price < other.price;
 }
 
 bool Order::operator>(const Order& other) const noexcept {
-    if (this->price == other.price) {
-        return this->order_id > other.order_id;
-    }
     return this->price > other.price;
 }
 
 bool Order::operator<=(const Order& other) const noexcept {
-    if (this->price == other.price) {
-        return this->order_id <= other.order_id;
-    }
     return this->price <= other.price;
 }
 
 bool Order::operator>=(const Order& other) const noexcept {
-    if (this->price == other.price) {
-        return this->order_id >= other.order_id;
-    }
     return this->price >= other.price;
 }
 

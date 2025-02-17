@@ -2,26 +2,30 @@
 #define ORDER_BOOK_H
 
 #include "Order.h"
-#include "PriceLevel.h"
-#include "OrderMap.h"
 #include <map>
-#include <functional>
+#include <unordered_map>
+#include <deque>
 #include <memory>
-#include <mutex>
+#include <functional>
+
+using order_ptr_t = std::shared_ptr<Order>;
+
+template<typename Comparator = std::less<int>>
+using OrderMap = std::map<int, std::deque<order_ptr_t>, Comparator>;
 
 class OrderBook {
 public:
     void placeOrder(std::unique_ptr<Order> order);
-    void removeOrder(unsigned int orderId);
+    void removeOrder(const unsigned int orderId);
     void modifyOrder(int orderId, int newPrice, int newQuantity);
-    Order getOrderById(int orderId) const;
     void printOrders();
 
 private:
-    std::mutex mtx;
-    OrderMap buy_orders;
-    OrderMap sell_orders;
-    std::unordered_map<unsigned int, std::shared_ptr<Order>> order_map;
+    inline void match_orders(order_ptr_t order);
+    inline void match_order(order_ptr_t buyOrder, order_ptr_t sellOrder);
+    OrderMap<std::greater<int>> buy_orders;
+    OrderMap<> sell_orders;
+    std::unordered_map<unsigned int, order_ptr_t> lookup_map;
 };
 
 #endif

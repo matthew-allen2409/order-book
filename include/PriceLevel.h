@@ -16,7 +16,6 @@ public:
     void print_orders();
 
 private:
-    std::mutex level_mutex;
     std::deque<std::shared_ptr<Order>> orders;
 };
 
