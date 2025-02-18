@@ -19,6 +19,10 @@ int Order::getPrice() const noexcept {
     return this->price;
 }
 
+void Order::setPrice(const int newPrice) noexcept {
+    price = newPrice;
+}
+
 int Order::getQuantity() const noexcept {
     return this->quantity;
 }

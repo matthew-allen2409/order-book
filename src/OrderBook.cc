@@ -71,7 +71,38 @@ void OrderBook::removeOrder(unsigned int orderId) {
     }
 }
 
-void OrderBook::modifyOrder(int orderId, int newPrice, int newQuantity) {}
+void OrderBook::modifyOrder(unsigned int orderId, int newPrice, int newQuantity) {
+    auto it = lookup_map.find(orderId);
+
+    if (it != lookup_map.end()) {
+        order_ptr_t orderPtr = it->second;
+
+        orderPtr->setQuantity(newQuantity);
+
+        auto currentPrice = orderPtr->getPrice();
+        if (currentPrice != newPrice) {
+            orderPtr->setPrice(newPrice);
+            orderPtr->setPrice(newPrice);
+            if (orderPtr->getType() == OrderType::Buy) {
+                auto& orders = buy_orders[currentPrice];
+                auto it = std::find_if(orders.begin(), orders.end(), [&orderId](const order_ptr_t it){ return it->getId() == orderId; });
+
+                if (it != orders.end()) {
+                    orders.erase(it);
+                }
+                buy_orders[newPrice].push_back(orderPtr);
+            } else {
+                auto& orders = sell_orders[currentPrice];
+                auto it = std::find_if(orders.begin(), orders.end(), [&orderId](const order_ptr_t it){ return it->getId() == orderId; });
+
+                if (it != orders.end()) {
+                    orders.erase(it);
+                }
+                sell_orders[newPrice].push_back(orderPtr);
+            }
+        }
+    }
+}
 
 void OrderBook::printOrders() {
     for (auto& [price, orders]:buy_orders) {

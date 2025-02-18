@@ -18,6 +18,7 @@ public:
 
     unsigned int getId() const noexcept;
     int getPrice() const noexcept;
+    void setPrice(const int newPrice) noexcept;
     int getQuantity() const noexcept;
     void setQuantity(const int newPrice) noexcept;
     OrderType getType() const noexcept;
