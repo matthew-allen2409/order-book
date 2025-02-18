@@ -1,4 +1,3 @@
-#include <deque>
 #include <iostream>
 #include <algorithm>
 #include <memory>
@@ -8,7 +7,7 @@
 using OrderType = Order::OrderType;
 
 void OrderBook::placeOrder(std::unique_ptr<Order> order) {
-    std::shared_ptr<Order> orderPtr = std::move(order);
+    order_ptr_t orderPtr = std::move(order);
     match_orders(orderPtr);
 }
 
@@ -74,8 +73,6 @@ void OrderBook::removeOrder(unsigned int orderId) {
 
 void OrderBook::modifyOrder(int orderId, int newPrice, int newQuantity) {}
 
-Order OrderBook::getOrderById(int orderId) const { return Order(Order::OrderType::Buy, 420, 100); }
-
 void OrderBook::printOrders() {
     for (auto& [price, orders]:buy_orders) {
         for (auto& order:orders) {
@@ -88,3 +85,4 @@ void OrderBook::printOrders() {
         }
     }
 }
+

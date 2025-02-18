@@ -6,11 +6,10 @@
 #include <unordered_map>
 #include <deque>
 #include <memory>
-#include <functional>
 
 using order_ptr_t = std::shared_ptr<Order>;
 
-template<typename Comparator = std::less<int>>
+template<typename Comparator>
 using OrderMap = std::map<int, std::deque<order_ptr_t>, Comparator>;
 
 class OrderBook {
@@ -24,7 +23,7 @@ private:
     inline void match_orders(order_ptr_t order);
     inline void match_order(order_ptr_t buyOrder, order_ptr_t sellOrder);
     OrderMap<std::greater<int>> buy_orders;
-    OrderMap<> sell_orders;
+    OrderMap<std::less<int>> sell_orders;
     std::unordered_map<unsigned int, order_ptr_t> lookup_map;
 };
 
