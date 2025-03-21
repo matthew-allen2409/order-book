@@ -1,6 +1,8 @@
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 #include <memory>
+
 #include "OrderBook.h"
 #include "Order.h"
 
@@ -12,7 +14,7 @@ void OrderBook::placeOrder(std::unique_ptr<Order> order) {
 }
 
 inline void OrderBook::match_orders(order_ptr_t order) {
-    if (order->getType() == OrderType::Buy) {
+    if (order->getType() == OrderType::BID) {
         auto it = sell_orders.begin();
         while (it != sell_orders.end() && it->first <= order->getPrice() && order->getQuantity() > 0) {
             auto& sellOrder = it->second.front();
@@ -53,7 +55,7 @@ void OrderBook::removeOrder(unsigned int orderId) {
     if (it != lookup_map.end()) {
         auto orderPtr = it->second;
 
-        if (orderPtr->getType() == OrderType::Buy) {
+        if (orderPtr->getType() == OrderType::BID) {
             auto& orders = buy_orders[orderPtr->getPrice()];
             orders.erase(std::find(orders.begin(), orders.end(), orderPtr));
             if (orders.empty()) {
@@ -83,7 +85,7 @@ void OrderBook::modifyOrder(unsigned int orderId, int newPrice, int newQuantity)
         if (currentPrice != newPrice) {
             orderPtr->setPrice(newPrice);
             orderPtr->setPrice(newPrice);
-            if (orderPtr->getType() == OrderType::Buy) {
+            if (orderPtr->getType() == OrderType::BID) {
                 auto& orders = buy_orders[currentPrice];
                 auto it = std::find_if(orders.begin(), orders.end(), [&orderId](const order_ptr_t it){ return it->getId() == orderId; });
 
@@ -115,5 +117,25 @@ void OrderBook::printOrders() {
             std::cout << *order << std::endl;
         }
     }
+}
+
+std::string OrderBook::serialize_orders() {
+    std::ostringstream output;
+
+    output << "Buy Orders:" << std::endl;
+    for (auto& [price, orders]:buy_orders) {
+        for (auto& order:orders) {
+            output << *order << std::endl;
+        }
+    }
+
+    output << "Sell Orders:" << std::endl;
+    for (auto& [price, orders]:sell_orders) {
+        for (auto& order:orders) {
+            output << *order << std::endl;
+        }
+    }
+
+    return output.str();
 }
 

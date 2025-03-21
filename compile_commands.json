@@ -1,0 +1,62 @@
+[
+  {
+    "arguments": [
+      "/sbin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "src/FIX_message.o",
+      "src/FIX_message.cc"
+    ],
+    "directory": "/home/matt/dev/order-book",
+    "file": "/home/matt/dev/order-book/src/FIX_message.cc",
+    "output": "/home/matt/dev/order-book/src/FIX_message.o"
+  },
+  {
+    "arguments": [
+      "/sbin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "src/main.o",
+      "src/main.cc"
+    ],
+    "directory": "/home/matt/dev/order-book",
+    "file": "/home/matt/dev/order-book/src/main.cc",
+    "output": "/home/matt/dev/order-book/src/main.o"
+  },
+  {
+    "arguments": [
+      "/sbin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "src/OrderBook.o",
+      "src/OrderBook.cc"
+    ],
+    "directory": "/home/matt/dev/order-book",
+    "file": "/home/matt/dev/order-book/src/OrderBook.cc",
+    "output": "/home/matt/dev/order-book/src/OrderBook.o"
+  },
+  {
+    "arguments": [
+      "/sbin/g++",
+      "-std=c++17",
+      "-Wall",
+      "-Iinclude",
+      "-c",
+      "-o",
+      "src/Order.o",
+      "src/Order.cc"
+    ],
+    "directory": "/home/matt/dev/order-book",
+    "file": "/home/matt/dev/order-book/src/Order.cc",
+    "output": "/home/matt/dev/order-book/src/Order.o"
+  }
+]

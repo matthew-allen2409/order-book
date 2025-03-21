@@ -6,8 +6,8 @@
 class Order {
 public:
     enum class OrderType {
-        Buy,
-        Sell
+        BID,
+        ASK
     };
 
     Order(

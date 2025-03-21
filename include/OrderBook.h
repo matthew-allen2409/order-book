@@ -18,6 +18,7 @@ public:
     void removeOrder(const unsigned int orderId);
     void modifyOrder(unsigned int orderId, int newPrice, int newQuantity);
     void printOrders();
+    std::string serialize_orders();
 
 private:
     inline void match_orders(order_ptr_t order);

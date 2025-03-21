@@ -53,10 +53,10 @@ bool Order::operator>=(const Order& other) const noexcept {
 
 std::ostream& operator<<(std::ostream& os, const Order::OrderType& orderType) {
     switch (orderType) {
-        case Order::OrderType::Buy:
+        case Order::OrderType::BID:
             os << "Buy";
             break;
-        case Order::OrderType::Sell:
+        case Order::OrderType::ASK:
             os << "Sell";
             break;
     }

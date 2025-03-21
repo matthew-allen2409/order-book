@@ -1,39 +1,57 @@
-#include <iostream>
-#include <random>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
 #include <memory>
-#include <chrono>
-#include "Order.h"
+#include <iostream>
+#include <thread>
+
 #include "OrderBook.h"
+#include "Server.h"
+#include "FIX_message.h"
+#include "Order.h"
 
 int main() {
-    int numOrders = 100000;
+    std::shared_ptr<OrderBook> book = std::make_shared<OrderBook>();
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> edis(0, 1);
-    std::uniform_int_distribution<> dis(1, 1000);
-    std::uniform_real_distribution<> pdis(0.0, 1000.0);
+    std::cout << "listening" << std::endl;
 
-    OrderBook book;
-
-    auto start = std::chrono::high_resolution_clock::now();
-
-    for (int i = 0; i < numOrders; i++) {
-        book.placeOrder(
-            std::make_unique<Order>(
-                static_cast<Order::OrderType>(edis(gen)),
-                dis(gen),
-                dis(gen)
-            )
-        );
+    int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (clientSocket < 0) {
+        perror("Failed to create socket");
+        return 1;
     }
 
-    auto end = std::chrono::high_resolution_clock::now();
+    sockaddr_in serverAddress;
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_port = htons(8081);
+    serverAddress.sin_addr.s_addr = INADDR_ANY;
 
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    if (connect(clientSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
+        perror("Failed to connect");
+        close(clientSocket);
+        return 1;
+    }
 
-    book.printOrders();
+    Server server(clientSocket, book);
+    std::thread(&Server::begin, &server).detach();
 
-    std::cout << "Execution Time: " << duration.count() << " microseconds" << std::endl;
+    char buffer[1024] = {0};
+
+    while (recv(clientSocket, buffer, sizeof(buffer), 0)) {
+        FIXMessage message = (std::string(buffer));
+        Order::OrderType type = message.tag_map["40"] == "1" ? Order::OrderType::BID : Order::OrderType::ASK;
+        int price = std::stoi(message.tag_map["44"]);
+        int quantity = std::stoi(message.tag_map["38"]);
+
+        book->placeOrder(
+            std::make_unique<Order>(
+                type,
+                price,
+                quantity
+            )
+        );
+
+        book->printOrders();
+    }
 }
 

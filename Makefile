@@ -12,7 +12,5 @@ OBJ = $(SRC:.cc=.o)
 $(TARGET): $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ)
 
-all: $(TARGET)
-
 clean:
 	rm -f $(OBJ) $(TEST_OBJ)
